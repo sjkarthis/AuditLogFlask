@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  audit-log-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: localhost:5001/audit-log:latest
+    container_name: audit-log-app
+    volumes:
+      - ./app:/app
+      - ./config:/config
+      - ./local_storage:/app/local_storage
+    ports:
+      - "5000:5000"
+    environment:
+      - LOCAL_STORAGE_PATH=/app/local_storage/fallback_data.json
+      - KAFKA_BROKER_URL=localhost:9092
