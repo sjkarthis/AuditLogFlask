@@ -13,7 +13,7 @@ service:
   type: NodePort
   port: 5000
   targetPort: http
-  nodePort: 5000
+  nodePort: 30500
 
 ingress:
   enabled: false
