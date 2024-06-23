@@ -5,7 +5,7 @@
 replicaCount: 2
 
 image:
-  repository: localhost:5001/audit-log
+  repository: sjkarthis/audit-log
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"

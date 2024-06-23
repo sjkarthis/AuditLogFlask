@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-flask-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/sjkarthis/AuditLogFlask'
+    targetRevision: main
+    path: audit-log-app
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: 'http://192.168.49.2:8443'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
