@@ -28,3 +28,4 @@ jobs:
 
       - name: Push Docker image with specific tag
         run: docker tag $DOCKERHUB_USERNAME/${IMAGE_NAME} $DOCKERHUB_USERNAME/${IMAGE_NAME}:${TAG} && docker push $DOCKERHUB_USERNAME/${IMAGE_NAME}:${TAG}
+        
