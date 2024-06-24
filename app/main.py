@@ -16,8 +16,11 @@ def create_object():
     if not object_name:
         return jsonify({'error': 'Missing object_name parameter'}), 400
 
-    # Get user id from single sign-on headers (assuming it's in 'user_id' header)
-    user_id = request.headers.get('user_id')
+    # Get user id from single sign-on headers (assuming it's in 'X-User-ID' header)
+    user_id = request.headers.get('X-User-ID')
+
+    if not user_id:
+        return jsonify({"error": "User not authorized"}), 401
 
     try:
         # Publish to Kafka
