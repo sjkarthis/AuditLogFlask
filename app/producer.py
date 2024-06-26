@@ -1,12 +1,13 @@
 from logging_config import logger
+from config import config
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
 import pybreaker
 import json
 
 # Kafka configuration
-KAFKA_BROKER = 'localhost:9092'  # Adjust this to your broker address
-TOPIC_NAME = 'audit_log_service_replay'  # Adjust this to your topic name
+KAFKA_BROKER = config.get('DEFAULT', 'kafka.bootstrap.servers')
+TOPIC_NAME = 'audit_log_service_replay'
 
 # Initialize Kafka producer with authentication
 producer = KafkaProducer(
@@ -16,7 +17,7 @@ producer = KafkaProducer(
 
 # Circuit breaker configuration
 circuit_breaker = pybreaker.CircuitBreaker(
-    fail_max=5,  # Maximum number of failures before opening the circuit
+    fail_max=5,
     reset_timeout=30  # Time in seconds before attempting to close the circuit again
 )
 
@@ -39,7 +40,7 @@ def send_message(key, message):
 @circuit_breaker
 def produce_message(key, message):
     """
-    Produces a message to Kafka with circuit breaker protection
+    Produces a message to Kafka with circuit breaker.
     """
     try:
         logger.info("Start publish ..")

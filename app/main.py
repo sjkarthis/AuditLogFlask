@@ -9,9 +9,6 @@ from logging_config import logger
 # Initialize Flask app
 app = Flask(__name__)
 
-# Local storage configuration
-LOCAL_STORAGE_PATH = os.getenv('LOCAL_STORAGE_PATH', '../local_storage/fallback_data.json')
-
 
 def is_valid(variable):
     """
@@ -37,7 +34,7 @@ def validate_request(data, headers):
         return jsonify({"error": "Object name is required."}), 400
 
     # Validate user ID from headers
-    user_id = headers.get('X-User-ID1')
+    user_id = headers.get('X-User-ID')
     if not is_valid(user_id):
         return jsonify({"error": "User ID is required."}), 401
 
@@ -83,10 +80,5 @@ def create_object():
 
 
 if __name__ == '__main__':
-    # Create local storage file if it doesn't exist
-    if not os.path.exists(LOCAL_STORAGE_PATH):
-        with open(LOCAL_STORAGE_PATH, 'w') as f:
-            pass
-
     # Run Flask app
-    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)))
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 6000)))

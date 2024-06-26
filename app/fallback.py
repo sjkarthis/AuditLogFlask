@@ -4,7 +4,7 @@ import json
 import os
 
 # Local storage configuration
-LOCAL_STORAGE_PATH = os.getenv('LOCAL_STORAGE_PATH', '/mnt/data/fallback_data.json')
+LOCAL_STORAGE_PATH = os.getenv('LOCAL_STORAGE_PATH', '../local_storage/fallback_data.json')
 
 
 def save_to_local_storage(data):

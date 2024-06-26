@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    image: sjkarthis/audit-log:1.0
+    image: sjkarthis/audit-log:1.0.1
     container_name: audit-log-app
     volumes:
       - ./app:/app
@@ -14,5 +14,4 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - LOCAL_STORAGE_PATH=/app/local_storage/fallback_data.json
-      - KAFKA_BROKER_URL=localhost:9092
+      - FLASK_ENV=prod
