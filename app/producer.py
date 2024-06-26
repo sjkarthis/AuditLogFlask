@@ -1,38 +1,54 @@
-from confluent_kafka import Producer, KafkaException
-import json
-import configparser
+import logging
+from kafka import KafkaProducer
+from kafka.errors import KafkaError
+import pybreaker
 
-# Load configuration from properties file
-config = configparser.ConfigParser()
-config.read('/config/config.properties')
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
-# Get Kafka bootstrap servers from the configuration
-KAFKA_BOOTSTRAP_SERVERS = config.get('DEFAULT', 'kafka.bootstrap.servers', fallback='localhost:9092')
+# Kafka configuration
+KAFKA_BROKER = 'localhost:9092'  # Adjust this to your broker address
+TOPIC_NAME = 'my_topic'  # Adjust this to your topic name
 
-# Kafka producer configuration
-kafka_config = {
-    'bootstrap.servers': KAFKA_BOOTSTRAP_SERVERS,
-    'client.id': 'rest-service-producer',
-}
+# Initialize Kafka producer with authentication
+producer = KafkaProducer(
+    bootstrap_servers=KAFKA_BROKER,
+    security_protocol='SASL_PLAINTEXT',
+    sasl_mechanism='PLAIN',
+    sasl_plain_username='user1',
+    sasl_plain_password='shw3O1zBZy',
+    value_serializer=lambda v: v.encode('utf-8')
+)
 
-producer = Producer(kafka_config)
+# Circuit breaker configuration
+circuit_breaker = pybreaker.CircuitBreaker(
+    fail_max=5,  # Maximum number of failures before opening the circuit
+    reset_timeout=30  # Time in seconds before attempting to close the circuit again
+)
 
-def publish_to_kafka(topic, message):
-    def delivery_report(err, msg):
-        if err is not None:
-            print(f'Message delivery failed: {err}')
-            # Implement circuit breaker logic here if needed
-        else:
-            print(f'Message delivered to {msg.topic()} [{msg.partition()}]')
 
-    producer.produce(topic, message.encode('utf-8'), callback=delivery_report)
-    producer.flush()
-
-def send_to_kafka(topic, data):
+def send_message(key, message):
+    """
+    Function to send a message to Kafka with key
+    """
     try:
-        # Convert data to JSON string (assuming data is a dictionary)
-        message = json.dumps(data)
-        publish_to_kafka(topic, message)
-    except KafkaException as e:
-        print(f'Failed to send message to Kafka: {e}')
+        future = producer.send(TOPIC_NAME, key=key, value=message)
+        result = future.get(timeout=10)  # Block for 'synchronous' sends
+        logger.info(f"Message '{message}' with key '{key}' sent to topic '{topic}'")
+        return result
+    except KafkaError as e:
+        logger.error(f"Failed to send message '{message}' with key '{key}': {e}")
+        raise
+
+
+@circuit_breaker
+def produce_message(key, message):
+    """
+    Produces a message to Kafka with circuit breaker protection
+    """
+    try:
+        send_message(key, message)
+    except Exception as e:
+        logger.error(f"Error in producing message: {e}")
         raise

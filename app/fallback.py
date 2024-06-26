@@ -1,16 +1,24 @@
+# fallback.py
+
 import json
 import os
 
-# Directory for local storage
-LOCAL_STORAGE_DIR = 'local_storage/'
+# Local storage configuration
+LOCAL_STORAGE_PATH = os.getenv('LOCAL_STORAGE_PATH', '/mnt/data/fallback_data.json')
 
-def store_locally(data):
-    # Ensure local storage directory exists
-    if not os.path.exists(LOCAL_STORAGE_DIR):
-        os.makedirs(LOCAL_STORAGE_DIR)
 
-    # Write data to a local file
-    filename = f'{LOCAL_STORAGE_DIR}local_storage.txt'
-    with open(filename, 'a') as f:
-        json.dump(data, f)
-        f.write('\n')
+def save_to_local_storage(data):
+    """
+    Saves data to local storage.
+
+    Args:
+        data (dict): The data to be saved.
+
+    Raises:
+        IOError: If there is an issue with writing to the local storage.
+    """
+    try:
+        with open(LOCAL_STORAGE_PATH, 'a') as f:
+            f.write(json.dumps(data) + '\n')
+    except IOError as e:
+        raise e
