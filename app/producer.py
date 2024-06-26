@@ -1,12 +1,8 @@
-import logging
+from logging_config import logger
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
 import pybreaker
 import json
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # Kafka configuration
 KAFKA_BROKER = 'localhost:9092'  # Adjust this to your broker address

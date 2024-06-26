@@ -3,16 +3,11 @@
 from flask import Flask, request, jsonify
 from producer import produce_message
 from fallback import save_to_local_storage
-import json
 import os
-import logging
+from logging_config import logger
 
 # Initialize Flask app
 app = Flask(__name__)
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # Local storage configuration
 LOCAL_STORAGE_PATH = os.getenv('LOCAL_STORAGE_PATH', '../local_storage/fallback_data.json')
