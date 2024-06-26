@@ -27,10 +27,8 @@ spec:
             - name: http
               containerPort: 5000
           env:
-            - name: LOCAL_STORAGE_PATH
-              value: /app/local_storage/fallback_data.json
-            - name: KAFKA_BROKER_URL
-              value: localhost:9092
+            - name: FLASK_ENV
+              value: prod
           volumeMounts:
             - name: local-storage
               mountPath: /app/local_storage
