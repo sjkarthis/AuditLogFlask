@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    image: sjkarthis/audit-log:1.0.4
+    image: sjkarthis/audit-log:1.0.5
     container_name: audit-log-app
     volumes:
       - ./app:/app

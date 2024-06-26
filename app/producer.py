@@ -9,9 +9,10 @@ import json
 KAFKA_BROKER = config.get('DEFAULT', 'kafka.bootstrap.servers')
 TOPIC_NAME = 'audit_log_service_replay'
 
-# Initialize Kafka producer with authentication
 producer = KafkaProducer(
     bootstrap_servers=KAFKA_BROKER,
+    sasl_plain_username=config.get('DEFAULT', 'kafka.username'),
+    sasl_plain_password=config.get('DEFAULT', 'kafka.password'),
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
