@@ -37,7 +37,7 @@ def validate_request(data, headers):
         return jsonify({"error": "Object name is required."}), 400
 
     # Validate user ID from headers
-    user_id = headers.get('X-User-ID')
+    user_id = headers.get('X-User-ID1')
     if not is_valid(user_id):
         return jsonify({"error": "User ID is required."}), 401
 
