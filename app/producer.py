@@ -2,14 +2,15 @@ import logging
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
 import pybreaker
+import json
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Kafka configuration
 KAFKA_BROKER = 'localhost:9092'  # Adjust this to your broker address
-TOPIC_NAME = 'my_topic'  # Adjust this to your topic name
+TOPIC_NAME = 'audit_log_service_replay'  # Adjust this to your topic name
 
 # Initialize Kafka producer with authentication
 producer = KafkaProducer(
@@ -18,7 +19,7 @@ producer = KafkaProducer(
     sasl_mechanism='PLAIN',
     sasl_plain_username='user1',
     sasl_plain_password='shw3O1zBZy',
-    value_serializer=lambda v: v.encode('utf-8')
+    value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
 # Circuit breaker configuration
@@ -33,9 +34,10 @@ def send_message(key, message):
     Function to send a message to Kafka with key
     """
     try:
-        future = producer.send(TOPIC_NAME, key=key, value=message)
-        result = future.get(timeout=10)  # Block for 'synchronous' sends
-        logger.info(f"Message '{message}' with key '{key}' sent to topic '{topic}'")
+        logger.info(f"Sending KAFKA message '{message}' with key '{key}' to topic '{TOPIC_NAME}'")
+        future = producer.send(TOPIC_NAME, value=message)
+        result = future.get(timeout=50)  # Block for 'synchronous' sends
+        logger.info(f"Message '{message}' with key '{key}' sent to topic '{TOPIC_NAME}'")
         return result
     except KafkaError as e:
         logger.error(f"Failed to send message '{message}' with key '{key}': {e}")
