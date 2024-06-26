@@ -78,7 +78,7 @@ def create_object():
         save_to_local_storage(message)
         logger.error(f"Failed to publish to Kafka: {e}. Data saved locally.")
 
-    logger.info("Object created successfully")
+    logger.info("Object created successfully!")
     return jsonify({"message": "Object created successfully"}), 201
 
 
