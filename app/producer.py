@@ -11,10 +11,6 @@ TOPIC_NAME = 'audit_log_service_replay'  # Adjust this to your topic name
 # Initialize Kafka producer with authentication
 producer = KafkaProducer(
     bootstrap_servers=KAFKA_BROKER,
-    security_protocol='SASL_PLAINTEXT',
-    sasl_mechanism='PLAIN',
-    sasl_plain_username='user1',
-    sasl_plain_password='shw3O1zBZy',
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
