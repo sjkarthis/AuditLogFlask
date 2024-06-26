@@ -50,6 +50,7 @@ def produce_message(key, message):
     Produces a message to Kafka with circuit breaker protection
     """
     try:
+        logger.info("Start publish ..")
         send_message(key, message)
     except Exception as e:
         logger.error(f"Error in producing message: {e}")

@@ -76,6 +76,7 @@ def create_object():
 
     try:
         # Publish to Kafka with circuit breaker and key
+        logger.info("Publish message to Kafka")
         produce_message(user_id, message)
     except Exception as e:
         # Save to local storage on any exception
