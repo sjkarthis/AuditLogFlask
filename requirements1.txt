@@ -12,4 +12,4 @@ opentelemetry-instrumentation-requests
 opentelemetry-instrumentation-pymongo
 opentelemetry-instrumentation-flask
 opentelemetry-instrumentation-logging
-shared-utils @ file://../SharedUtils
+

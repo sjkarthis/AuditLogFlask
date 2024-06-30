@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AuditLogFlask.iml" filepath="$PROJECT_DIR$/.idea/AuditLogFlask.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../AuditLogServiceConsumer/.idea/AuditLogServiceConsumer.iml" filepath="$PROJECT_DIR$/../AuditLogServiceConsumer/.idea/AuditLogServiceConsumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ExternalService/.idea/ExternalService.iml" filepath="$PROJECT_DIR$/../ExternalService/.idea/ExternalService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SharedUtils/.idea/SharedUtils.iml" filepath="$PROJECT_DIR$/../SharedUtils/.idea/SharedUtils.iml" />
     </modules>
   </component>
 </project>
